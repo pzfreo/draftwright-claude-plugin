@@ -1,0 +1,14 @@
+{
+  "name": "draftwright-marketplace",
+  "description": "Draftwright technical drawing tools for Claude",
+  "owner": {
+    "name": "Draftwright"
+  },
+  "plugins": [
+    {
+      "name": "draftwright",
+      "source": "./",
+      "description": "Create and review technical drawings from STEP files"
+    }
+  ]
+}
