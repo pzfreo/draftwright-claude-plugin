@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "draftwright": {
+      "type": "http",
+      "url": "https://mcp.draftwright.io/mcp-stateless"
+    }
+  }
+}

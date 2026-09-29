@@ -1,0 +1,11 @@
+{
+  "name": "draftwright",
+  "displayName": "Draftwright",
+  "version": "0.1.0",
+  "description": "Turn STEP models into reviewable technical drawings and PDF files with Draftwright.",
+  "author": {
+    "name": "Draftwright",
+    "url": "https://draftwright.io"
+  },
+  "license": "MIT"
+}
