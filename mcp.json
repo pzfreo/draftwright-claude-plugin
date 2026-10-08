@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "draftwright": {
+      "type": "streamable-http",
+      "url": "https://mcp.draftwright.io/mcp-stateless"
+    }
+  }
+}

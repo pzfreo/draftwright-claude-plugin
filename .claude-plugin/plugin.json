@@ -1,8 +1,8 @@
 {
   "name": "draftwright",
-  "displayName": "Draftwright",
-  "version": "0.1.0",
-  "description": "Turn STEP models into reviewable technical drawings and PDF files with Draftwright.",
+  "displayName": "Specify + Draftwright",
+  "version": "0.3.0",
+  "description": "Confirm manufacturing requirements on a STEP part, review its technical drawing and download PDF or STEP with PMI.",
   "author": {
     "name": "Draftwright",
     "url": "https://draftwright.io"

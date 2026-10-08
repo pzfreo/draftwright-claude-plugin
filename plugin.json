@@ -1,0 +1,20 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "draftwright",
+  "version": "0.3.0",
+  "description": "Specify manufacturing requirements on a STEP part and turn it into a reviewable technical drawing and PDF.",
+  "author": {
+    "name": "Draftwright",
+    "url": "https://draftwright.io"
+  },
+  "homepage": "https://draftwright.io",
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Specify + Draftwright",
+        "shortDescription": "Specify a STEP part, then review its drawing"
+      }
+    }
+  }
+}

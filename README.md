@@ -1,24 +1,72 @@
-# Draftwright for Claude
+# Specify + Draftwright
 
-Draftwright turns a STEP model into a technical drawing that you can inspect with Claude, revise, and download as a PDF. This plugin combines a small drawing workflow skill with Draftwright's authenticated remote MCP connector. It works in Claude chat and other Claude surfaces that support remote connectors. The interactive MCP App shows upload, drawing preview, findings, and PDF actions inside the conversation where supported.
+This plugin combines Specify's manufacturing requirements workflow with
+Draftwright's technical drawing workflow through an authenticated remote MCP
+server. Chat handles questions and decisions. The visual card shows the part,
+explicit face selections, the resulting drawing and download actions where the
+host supports MCP Apps.
 
-Connect your Draftwright account through OAuth. When you upload a STEP file, the file goes from your device to Draftwright. The connector sends drawing jobs and results to your Draftwright account; Claude receives the drawing image and review findings when it calls the review tool. The plugin contains no local executable or credentials. If the in-chat card is unavailable, the connector provides private, expiring browser links for upload and PDF download.
+## Beta release candidate
 
-## Install and use
+Version 0.3.0 adds Specify guidance, host-authorized chat attachments, GD&T review
+and confirmed PMI STEP downloads. It also describes durable sessions and queued
+work. Distribute this version after the corresponding server beta has been
+promoted and tested in production.
 
-For Claude chat, the tested connection path is **Customize → Connectors → Add custom connector**. Enter `https://mcp.draftwright.io/mcp-stateless`, then sign in to your Draftwright account. You can use the in-chat upload and drawing viewer without installing a plugin.
+Connect your Draftwright account through OAuth. Attach a STEP file in a host that
+supports authorized file references, or use the card's upload action. The plugin
+contains no executable or credentials. The server limits raw STEP inputs to 25 MB.
+Browser handoff links remain available when a host cannot display the card.
 
-To add the drawing skill as a plugin, open **Customize → Plugins → Add marketplace**, enter `https://github.com/pzfreo/draftwright-claude-plugin`, and add **Draftwright**. The plugin declares the same remote MCP endpoint. Check its connector status and complete OAuth if Claude asks you to connect it. If you already connected Draftwright directly, keep using that working connection.
+Ask:
 
-In Claude Code, the equivalent commands are:
+- “Specify the manufacturing requirements for this part.”
+- “Review the GD&T and save a STEP with confirmed PMI.”
+- “Make a technical drawing from this STEP file.”
+
+Specify proposes manufacturing choices; the assistant must obtain acceptance
+before saving them. A clean automated drawing check is not manufacturing approval.
+Review dimensions, tolerances and requirements before sharing a drawing.
+
+The beta allows three open Specify parts per account and 20 distinct PMI writes
+per rolling day. Working sessions last seven days and recover after server
+restarts. Retrying an interrupted write uses its saved operation. Ask to close a
+working part when you no longer need it; saved drawing and STEP artifacts remain
+available through their project/artifact IDs.
+
+## Claude
+
+The tested connector route is **Customize → Connectors → Add custom connector**.
+Enter `https://mcp.draftwright.io/mcp-stateless` and complete Draftwright OAuth.
+Refresh the connection after a server update to load its latest tool definitions.
+
+To add the skills, use this repository as a Claude plugin marketplace. Claude Code:
 
 ```text
 claude plugin marketplace add pzfreo/draftwright-claude-plugin
 claude plugin install draftwright@draftwright-marketplace
 ```
 
-The GitHub-generated source ZIP is a repository snapshot, not a tested plugin upload package; use the marketplace route above. The plugin manifest and local marketplace installation have been validated with Claude Code 2.1.284. Claude chat marketplace activation still needs an end-to-end test.
+Complete OAuth for the plugin's connector. If a direct connector already works,
+keep that connection and avoid duplicate Draftwright connectors.
 
-Ask Claude to “make a technical drawing from my STEP file” to start. The drawing still needs your review for manufacturing intent, such as material, tolerances, and finish.
+## Portable package
+
+`plugin.json`, `mcp.json` and the `skills/` folder supply the portable plugin
+manifest and two workflows. A release ZIP should include those files with this
+README and LICENSE at its root. Claude's `.claude-plugin` and `.mcp.json` remain
+for its marketplace installation.
+
+The portable package supports hosts implementing this plugin format and remote
+MCP OAuth. Visual card and chat attachment capabilities depend on the host.
+Installing a new ZIP updates packaged skills; refreshing an MCP connection updates
+server tools.
+
+For Codex's remote MCP connection:
+
+```sh
+codex mcp add draftwright --url https://mcp.draftwright.io/mcp-stateless/
+codex mcp login draftwright
+```
 
 Source: [Draftwright](https://draftwright.io). Licensed under MIT.

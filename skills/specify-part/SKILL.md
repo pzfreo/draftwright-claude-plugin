@@ -1,0 +1,33 @@
+---
+name: specify-part
+description: Use Draftwright Specify to identify or edit manufacturing requirements on a STEP part before making a technical drawing. Use for PMI, GD&T review, tolerances, datums, fits, material, surface finish, or manufacturing intent; use the direct drawing workflow when the user only wants a drawing.
+---
+
+# Specify a STEP part
+
+For a STEP already attached to chat, pass its host-authorized file reference as `file` to `open_specify`. This imports the attachment and returns the session directly; do not ask the user to upload it again or send its bytes as tool text. Poll `read_specify` while analysis runs.
+
+Call `open_specify` to open the visual card through the connected Draftwright MCP server. The user uploads the STEP file from their device. After upload the card shares its session ID with chat. If that context is unavailable, call `read_specify` without a session ID to discover the account's active parts and select the matching file; ask if several match.
+
+In Codex, when the user has provided a local STEP path, call `open_specify` and upload that file directly to its `upload_api_url` as multipart field `file`. For example, use `curl --fail-with-body --form 'file=@/absolute/path/part.step' '<upload_api_url>'` with properly quoted values. Treat the returned URL as a private, short-lived capability; do not print it or put file bytes in the conversation. The upload response returns `session_id`; poll `read_specify(session_id)` until analysis is ready before editing. The upload is an HTTP file transfer; subsequent requirement and drawing operations use MCP. No website automation is needed. Do not upload to an unrelated URL or use a file the user has not selected.
+
+For “the selected face”, read `selected_face_ids` from the current session. These are explicit clicks in the card, not suggested question highlights. Use them for the requested datum or match them to the returned feature questions. If the list is empty, ask the user to click the face in the card rather than supply a face number.
+
+For a GD&T review, read the existing PMI and measured features, check datum references and feature associations, and flag missing or conflicting requirements. Describe the checks performed and any unsupported or unresolved evidence; Specify is not a complete standards-compliance certification. Ask the owner to confirm proposed GD&T before saving it.
+
+Handle requests such as “make the shaft M3 and the rim straight knurled” through MCP:
+
+1. Call `read_specify(session_id)` for the current questions, measured features, saved answers and revision. Distinguish observed geometry/existing PMI from questions marked proposed or required. Show proposed manufacturing values before asking the user to accept them; a tap-drill diameter match does not establish a thread. Match the user's intent to returned question IDs and options.
+2. For typed fits, threads or tolerances, use `specify_interpret(session_id, question, text)` to validate the engine's answer value.
+3. Call `update_specify(session_id, updates, expected_revision)` to merge confirmed answers. For an explicitly accepted group of described defaults, pass their exact current question IDs in `accept_defaults` and `updates={}`. New dependent proposals remain unconfirmed. Read the saved result and verify the requested value, including any depth or qualifier, before saying it was applied. On a revision conflict, read the part again before retrying. The open card refreshes automatically.
+4. When the user asks to create the drawing, resolve `pending_decisions` first. Asking for a drawing does not accept proposals. Call `specify_generate(session_id, expected_revision)` using the saved answers, then check its job with `job_status`. The card shows the resulting sheet and PDF button. Reopen an existing view with `open_specify(session_id)` if the user needs to see it again.
+
+The MCP tools operate on the card's server session. Use them for chat edits; browser automation of the Draftwright website does not control this card. Offer the returned website link only when the card cannot load or the user asks to work on the website. If the required MCP tools are missing, explain that the connector needs refreshing rather than silently switching to browser automation.
+
+Treat generated dimensions and geometry as observations of the STEP file. Let the user decide material, fit, tolerance, finish and other manufacturing intent. Do not claim the drawing is ready until its job succeeds. Use `review_drawing` when you need to inspect the resulting sheet yourself, and report any concrete issue or unresolved requirement. The card offers PDF download; use `request_pdf_download` for text-only clients when a PDF is available.
+
+When the user wants the enriched model, call `specify_export_step(session_id, expected_revision)` after resolving pending decisions. It writes only confirmed requirements and returns a private download link plus durable `project_id`/`step_artifact_id`; no drawing is needed and the working session remains editable. Report writer warnings. Use `request_step_download` with those saved IDs to renew an expired link, even after the Specify session is gone. For a part already handed to Draftwright, use its generation artifact ID to download that exact enriched STEP. Drawing-source edits do not update this STEP.
+
+`specify_generate` writes confirmed requirements into an enriched STEP before handing it to Draftwright. To improve the resulting drawing, consult `drawing_api_reference`, read `drawing_source`, save a revised source with `persist_script` using the current parent version, submit a render job with `submit_job`, and visually inspect its result with `review_drawing`. Keep the enriched STEP artifact and project IDs from generation. Report the separate validation evidence and any failed job's diagnostics. Changing drawing source does not change the part's manufacturing requirements.
+
+Specify is a preview feature. Configured deployments keep working sessions for seven days and recover queued analysis/PMI writes after restarts. A stale revision must be read again before editing. Retry an interrupted export or generation with the same session and saved revision to recover existing work. The beta allows three open parts per account and 20 distinct PMI writes per day; use `close_specify` only when the user wants to discard a working part. Saved STEP and drawing artifacts remain available independently of the editor session.
