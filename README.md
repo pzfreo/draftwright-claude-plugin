@@ -8,6 +8,14 @@ Apps. Ask in chat for the PDF or STEP with confirmed PMI. The assistant delivers
 the exact exported file as a chat download when the host supports file delivery,
 with a private download link as fallback.
 
+## Directory submission candidate
+
+Version 0.3.2 adds listing metadata, existing Draftwright icons and review cases.
+Build its plugin ZIP and separate reviewer test pack with
+`python3 scripts/package-submission.py --output-dir /tmp/draftwright-submission`.
+See `review/README.md` for remaining submission requirements. This candidate has
+not been submitted or approved for the public directory.
+
 ## Beta release
 
 Version 0.3.1 updates both skills to deliver exported PDFs and PMI STEP files

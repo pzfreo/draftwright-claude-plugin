@@ -1,0 +1,68 @@
+{
+  "package_version": "0.3.2",
+  "cases": [
+    {
+      "id": "P1",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "P2",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "P3",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "P4",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "P5",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "N1",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "N2",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    },
+    {
+      "id": "N3",
+      "status": "not_run",
+      "reason": "Dedicated reviewer account and supported-host acceptance run still required."
+    }
+  ],
+  "engineering_evidence": {
+    "date": "2026-10-08",
+    "server_commit": "61647f9ca222a44fa8a58ef7ee254763186e0c31",
+    "mcp_resource_versions": "workspace-v10 and specify-v10, with v9 aliases",
+    "authenticated_connection": "passed on existing operator-owned test fixtures",
+    "pdf_binary_and_single_use_link": "passed",
+    "pmi_step_exact_saved_bytes_and_single_use_link": "passed",
+    "dedicated_reviewer_account_tests": "not_run",
+    "signed_in_chatgpt_attachment_display": "not_run",
+    "demo_recording": "not_supplied"
+  },
+  "preparation_checks": {
+    "official_submission_fields_checked_on": "2026-10-08",
+    "manifest_lengths_and_required_metadata": "passed",
+    "package_assets_and_archive_integrity": "passed",
+    "claude_marketplace_validation": "passed",
+    "both_packaged_skills_validation": "passed",
+    "public_bracket_exact_byte_comparison": "passed",
+    "fixture_native_cad_import": "passed",
+    "public_legal_urls": "passed",
+    "public_support_repository": "passed",
+    "portal_scans": "not_run"
+  }
+}
