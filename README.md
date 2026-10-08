@@ -6,12 +6,13 @@ server. Chat handles questions and decisions. The visual card shows the part,
 explicit face selections, the resulting drawing and download actions where the
 host supports MCP Apps.
 
-## Beta release candidate
+## Beta release
 
 Version 0.3.0 adds Specify guidance, host-authorized chat attachments, GD&T review
 and confirmed PMI STEP downloads. It also describes durable sessions and queued
-work. Distribute this version after the corresponding server beta has been
-promoted and tested in production.
+work. The corresponding server beta is deployed and its authenticated
+STEP export/re-import, drawing preview and PDF download flow has been tested in
+production.
 
 Connect your Draftwright account through OAuth. Attach a STEP file in a host that
 supports authorized file references, or use the card's upload action. The plugin
