@@ -12,8 +12,9 @@ with a private download link as fallback.
 
 Version 0.3.1 updates both skills to deliver exported PDFs and PMI STEP files
 through chat. Version 0.3.0 added Specify guidance, host-authorized chat
-attachments, GD&T review and durable sessions. The compact card without download
-buttons is being tested on preview; production cards may still show the buttons.
+attachments, GD&T review and durable sessions. The matching server update removes card download buttons so file delivery happens
+through chat. Refresh the connector for updated tools; install this ZIP to update
+the packaged skills.
 
 Connect your Draftwright account through OAuth. Attach a STEP file in a host that
 supports authorized file references, or use the card's upload action. The plugin
