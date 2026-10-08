@@ -34,6 +34,14 @@ restarts. Retrying an interrupted write uses its saved operation. Ask to close a
 working part when you no longer need it; saved drawing and STEP artifacts remain
 available through their project/artifact IDs.
 
+### Known beta limitation
+
+Specify can inspect closed internal cavities represented as `BREP_WITH_VOIDS`,
+but the current PMI writer cannot export them. This is tracked in
+[Specify issue #12](https://github.com/pzfreo/specify-core/issues/12). If export
+fails, keep the original part and saved requirements; do not remove requirements
+just to get a file out.
+
 ## Claude
 
 The tested connector route is **Customize → Connectors → Add custom connector**.
