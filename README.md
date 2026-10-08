@@ -3,16 +3,18 @@
 This plugin combines Specify's manufacturing requirements workflow with
 Draftwright's technical drawing workflow through an authenticated remote MCP
 server. Chat handles questions and decisions. The visual card shows the part,
-explicit face selections, the resulting drawing and download actions where the
-host supports MCP Apps.
+explicit face selections and the resulting drawing where the host supports MCP
+Apps. Ask in chat for the PDF or STEP with confirmed PMI. The assistant delivers
+the exact exported file as a chat download when the host supports file delivery,
+with a private download link as fallback.
 
 ## Beta release
 
-Version 0.3.0 adds Specify guidance, host-authorized chat attachments, GD&T review
-and confirmed PMI STEP downloads. It also describes durable sessions and queued
-work. The corresponding server beta is deployed and its authenticated
-STEP export/re-import, drawing preview and PDF download flow has been tested in
-production.
+Version 0.3.1 updates both skills to deliver exported PDFs and PMI STEP files
+through chat. Version 0.3.0 added Specify guidance, host-authorized chat
+attachments, GD&T review and durable sessions. The matching server update removes card download buttons so file delivery happens
+through chat. Refresh the connector for updated tools; install this ZIP to update
+the packaged skills.
 
 Connect your Draftwright account through OAuth. Attach a STEP file in a host that
 supports authorized file references, or use the card's upload action. The plugin
