@@ -1,0 +1,38 @@
+# Reviewer access instructions
+
+Supply these instructions and the dedicated account credentials in the secure
+OpenAI Review details form. This document is outside the public plugin ZIP and
+contains no actual credentials.
+
+## Login flow
+
+1. Install/connect Specify + Draftwright in the supported host, or choose Connect
+   for the declared server in the OpenAI Plugins dashboard.
+2. Use the production server URL https://mcp.draftwright.io/mcp-stateless.
+3. OAuth opens a generated https://draftwright.io/oauth/consent request. Start this
+   from the host; visiting the consent URL directly has no authorization request.
+4. If an existing personal browser session is present, use an isolated browser
+   profile or sign out before testing. Ensure the dedicated reviewer identity is
+   used rather than a developer/customer account.
+5. Enter the supplied existing-account Email and Password and choose Sign in with
+   email. Google sign-in is optional and is not required for this review path.
+6. Choose Allow connection. Wait for the redirect back to the initiating host.
+7. Before the recorded acceptance run, seed one owned sample drawing using P2
+   with demo-bracket.step. Keep it available for review. Run P1 to verify it is
+   visible; P2 creates another test drawing and P3 opens the Specify working part.
+
+## Secure fields to complete
+
+- Reviewer account email: supply privately in portal.
+- Reviewer account password: supply privately in portal.
+- Login URL: OAuth-generated https://draftwright.io/oauth/consent.
+- Workspace/tenant: individual Draftwright account; use only its owned projects.
+- Data: attach the included synthetic fixtures; seed only owned sample projects.
+- Contact: paul@draftwright.io.
+- Public support: https://github.com/pzfreo/draftwright-claude-plugin/issues.
+
+Before submission, verify login succeeds without Google, MFA, email/SMS codes or
+operator approval, and that both drawing/Specify quotas and export permissions are
+available. Keep this account and its sample artifacts available for later reviews.
+Never paste credentials, bearer URLs or cookies into package files, public issues,
+screenshots, result logs or the walkthrough recording.

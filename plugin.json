@@ -1,11 +1,12 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "draftwright",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Specify manufacturing requirements on a STEP part and turn it into a reviewable technical drawing and PDF.",
   "author": {
     "name": "Draftwright",
-    "url": "https://draftwright.io"
+    "url": "https://draftwright.io",
+    "email": "paul@draftwright.io"
   },
   "homepage": "https://draftwright.io",
   "license": "MIT",
@@ -13,8 +14,102 @@
     "com.openai": {
       "interface": {
         "displayName": "Specify + Draftwright",
-        "shortDescription": "Specify a STEP part, then review its drawing"
+        "shortDescription": "Specify parts. Drawings & PDFs",
+        "longDescription": "Review a STEP part's manufacturing requirements with Specify, confirm material, tolerances, datums, fits and finishes in chat, and save a STEP with confirmed PMI. Generate and review a technical drawing with Draftwright, inspect its automated findings, and request the exact PDF or enriched STEP as a chat download where the host supports file delivery, with private links as fallback. Interactive cards show the part, explicit face selection and drawing preview on supported hosts. Requires a Draftwright account connected through OAuth. Raw STEP files are limited to 25 MB. Specify is a beta with three open parts and 20 distinct PMI writes per account per rolling day. Proposals require owner confirmation; automated checks are not manufacturing approval or complete GD&T certification. The current PMI writer cannot export BREP_WITH_VOIDS closed cavities.",
+        "developerName": "Draftwright",
+        "category": "Productivity",
+        "capabilities": [
+          "Inspect STEP models",
+          "Confirm manufacturing requirements",
+          "Review GD&T and PMI",
+          "Export STEP with confirmed PMI",
+          "Generate and review drawings",
+          "Download PDFs"
+        ],
+        "websiteURL": "https://draftwright.io",
+        "supportURL": "https://github.com/pzfreo/draftwright-claude-plugin/issues",
+        "privacyPolicyURL": "https://draftwright.io/privacy.html",
+        "termsOfServiceURL": "https://draftwright.io/terms.html",
+        "defaultPrompt": [
+          "Review the manufacturing requirements for this STEP part.",
+          "Check the GD&T and save a STEP with confirmed PMI.",
+          "Create and review a technical drawing, then give me its PDF."
+        ],
+        "brandColor": "#17324A",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/logo.png"
+      },
+      "review": {
+        "test_cases": {
+          "positive": [
+            {
+              "description": "P1: Connect the account and list saved projects without changing them.",
+              "prompt": "Use Draftwright to check my connection and show my saved projects. Do not create or change anything.",
+              "tools_triggered": "connection_status, list_projects",
+              "expected_behavior": "Confirm the connected Draftwright account and return only its accessible projects, including the seeded reviewer sample drawing. No upload, PMI write, drawing job or export is created."
+            },
+            {
+              "description": "P2: Create and review a drawing from an attached public demo bracket, then deliver its PDF.",
+              "prompt": "Use Draftwright to make a technical drawing of the attached demo bracket. Show its preview and automated findings, then give me its PDF. Do not invent material, fits, threads or manufacturing tolerances.",
+              "tools_triggered": "request_step_upload, job_status, review_drawing, request_pdf_download",
+              "expected_behavior": "Import the host-authorized attachment once, wait for its owned drawing job to succeed, inspect the returned drawing and distinguish automated checks from unconfirmed manufacturing choices. The card shows the drawing. Return the exact exported PDF as a chat file when supported, otherwise the private link. Do not claim an attachment exists before host file delivery succeeds.",
+              "file_attachment_urls": [
+                "https://draftwright.io/samples/draftwright-demo-bracket.step"
+              ]
+            },
+            {
+              "description": "P3: Open Specify and review the selected face and existing GD&T/PMI without assigning a thread.",
+              "prompt": "Open Specify for the attached blind-hole block. Review its existing PMI and unresolved manufacturing decisions. Do not turn a hole diameter into a thread requirement. After I click a flat face, tell me which face is selected and whether any datum requirement is already saved; do not add one yet.",
+              "tools_triggered": "open_specify, read_specify, specify_selection",
+              "expected_behavior": "Import the part, wait for analysis, show its 3D model and pending proposals. After a face click, read selected_face_ids from the server instead of guessing from question highlights. Describe measured geometry and actual PMI separately from suggested datums or threads; save no requirements.",
+              "file_attachment_urls": [
+                "https://raw.githubusercontent.com/pzfreo/draftwright-claude-plugin/5cd7169723ff8cdd79982eef439f603529567162/review/fixtures/blind-hole-block.step"
+              ]
+            },
+            {
+              "description": "P4: Confirm manufacturing decisions and export an enriched STEP without generating a drawing.",
+              "prompt": "For the open blind-hole block, set the material to steel and hole location by plus/minus dimensions. The blind hole is plain and unthreaded. Show me the remaining proposed requirements and ask for my confirmation before saving them. Once I explicitly confirm those displayed proposals, save and give me the STEP with PMI, without generating a drawing.",
+              "tools_triggered": "read_specify, specify_interpret, update_specify, specify_export_step",
+              "expected_behavior": "Match the owner instructions to current questions and validated options. Show every remaining proposal before accepting the explicitly confirmed group, using the current revision. No thread or GD&T is silently assumed. Refuse export while decisions remain pending. After confirmation, return the exact saved AP242 STEP with its writer warnings through chat file delivery or a private link. Keep the session editable and create no drawing job."
+            },
+            {
+              "description": "P5: Generate a drawing from the same confirmed PMI, review it, and retrieve both saved outputs.",
+              "prompt": "Use the confirmed requirements in the open Specify part to generate a drawing. Review its preview and explain any automated findings with their details. Give me the PDF and the exact enriched STEP used for this drawing. Keep the plain blind hole unthreaded.",
+              "tools_triggered": "read_specify, specify_generate, job_status, review_drawing, request_pdf_download, request_step_download",
+              "expected_behavior": "Use the existing confirmed session and current revision instead of reimporting the original file. Wait for generation, inspect source-matched preview and validation evidence, and explain each finding or state that a check was not performed. Retrieve the STEP using the generation artifact_id as step_artifact_id. Deliver the exact owned PDF and PMI STEP via host file delivery when available or private links; do not reconstruct either file or claim manufacturing approval."
+            }
+          ],
+          "negative": [
+            {
+              "description": "N1: An unrelated request should not invoke Draftwright.",
+              "prompt": "What is the weather in London today?",
+              "expected_behavior": "Use an appropriate weather capability or explain its availability. Do not call Draftwright tools, create parts, upload files or consume CAD quotas. Draftwright is not a weather service."
+            },
+            {
+              "description": "N2: A request for an export does not silently confirm proposals.",
+              "prompt": "I have just opened this part in Specify and have not reviewed any manufacturing proposals. Give me the STEP with PMI now without asking any manufacturing questions.",
+              "expected_behavior": "Read the current pending decisions, explain that they need confirmation and show the relevant proposals. Do not save invented material, threads, fits or datums. If specify_export_step is attempted, its pending-decision refusal must be retained and explained; no enriched STEP may be presented as successfully exported."
+            },
+            {
+              "description": "N3: An unknown or unowned artifact cannot be downloaded.",
+              "prompt": "Download the saved PMI STEP from project openai-review-foreign-owner with step_artifact_id 00000000-0000-4000-8000-000000000001.",
+              "expected_behavior": "Refuse or report that the project/artifact is unavailable to the connected account. If request_step_download is called, the ownership check must reject it. No bytes or private link are returned; do not switch accounts, bypass authorization, enumerate other users or search public storage."
+            }
+          ]
+        }
+      },
+      "publication": {
+        "release_notes": "0.3.2 prepares the public directory listing with product metadata, existing Draftwright icons and five positive/three negative review cases. It retains production OAuth, both skills, chat file delivery and existing beta limits. No server behavior changes."
       }
     }
-  }
+  },
+  "repository": "https://github.com/pzfreo/draftwright-claude-plugin",
+  "keywords": [
+    "CAD",
+    "STEP",
+    "PMI",
+    "GD&T",
+    "engineering drawings",
+    "manufacturing"
+  ]
 }

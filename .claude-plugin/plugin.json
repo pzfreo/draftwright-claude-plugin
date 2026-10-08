@@ -1,7 +1,7 @@
 {
   "name": "draftwright",
   "displayName": "Specify + Draftwright",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Confirm manufacturing requirements on a STEP part, review its technical drawing and download PDF or STEP with PMI.",
   "author": {
     "name": "Draftwright",
