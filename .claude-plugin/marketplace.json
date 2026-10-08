@@ -9,7 +9,7 @@
       "name": "draftwright",
       "source": "./",
       "description": "Specify manufacturing requirements on a STEP part, then review its drawing and PDF.",
-      "version": "0.3.0"
+      "version": "0.3.1"
     }
   ]
 }
