@@ -18,7 +18,8 @@ status. No credentials are included in either archive.
 3. Upload the submission ZIP, then connect its MCP server and satisfy the exact
    domain challenge provided by the portal. Do not reuse an unrelated token.
 4. Complete automated package, skill and tool scans, and correct findings.
-5. Run every case using that dedicated account in the supported ChatGPT and Codex
+5. Seed an owned sample drawing with P2 so the account includes example data.
+   Run every case using that dedicated account in the supported ChatGPT and Codex
    surfaces. Record actual outcomes in results.json; do not mark a skipped case
    passed. Host-specific visual cards/file attachments must be checked separately
    from server binary delivery.

@@ -46,12 +46,12 @@
               "description": "P1: Connect the account and list saved projects without changing them.",
               "prompt": "Use Draftwright to check my connection and show my saved projects. Do not create or change anything.",
               "tools_triggered": "connection_status, list_projects",
-              "expected_behavior": "Confirm the connected Draftwright account and return only its accessible projects. An empty list is valid on a new reviewer account. No upload, PMI write, drawing job or export is created."
+              "expected_behavior": "Confirm the connected Draftwright account and return only its accessible projects, including the seeded reviewer sample drawing. No upload, PMI write, drawing job or export is created."
             },
             {
               "description": "P2: Create and review a drawing from an attached public demo bracket, then deliver its PDF.",
               "prompt": "Use Draftwright to make a technical drawing of the attached demo bracket. Show its preview and automated findings, then give me its PDF. Do not invent material, fits, threads or manufacturing tolerances.",
-              "tools_triggered": "request_step_upload, job_status, review_drawing, request_pdf_download; submit_job only if a separate export job is needed",
+              "tools_triggered": "request_step_upload, job_status, review_drawing, request_pdf_download",
               "expected_behavior": "Import the host-authorized attachment once, wait for its owned drawing job to succeed, inspect the returned drawing and distinguish automated checks from unconfirmed manufacturing choices. The card shows the drawing. Return the exact exported PDF as a chat file when supported, otherwise the private link. Do not claim an attachment exists before host file delivery succeeds.",
               "file_attachment_urls": [
                 "https://draftwright.io/samples/draftwright-demo-bracket.step"
@@ -60,7 +60,7 @@
             {
               "description": "P3: Open Specify and review the selected face and existing GD&T/PMI without assigning a thread.",
               "prompt": "Open Specify for the attached blind-hole block. Review its existing PMI and unresolved manufacturing decisions. Do not turn a hole diameter into a thread requirement. After I click a flat face, tell me which face is selected and whether any datum requirement is already saved; do not add one yet.",
-              "tools_triggered": "open_specify, read_specify; specify_selection is called by the card after the explicit face click",
+              "tools_triggered": "open_specify, read_specify, specify_selection",
               "expected_behavior": "Import the part, wait for analysis, show its 3D model and pending proposals. After a face click, read selected_face_ids from the server instead of guessing from question highlights. Describe measured geometry and actual PMI separately from suggested datums or threads; save no requirements.",
               "file_attachment_urls": [
                 "https://raw.githubusercontent.com/pzfreo/draftwright-claude-plugin/5cd7169723ff8cdd79982eef439f603529567162/review/fixtures/blind-hole-block.step"
@@ -69,7 +69,7 @@
             {
               "description": "P4: Confirm manufacturing decisions and export an enriched STEP without generating a drawing.",
               "prompt": "For the open blind-hole block, set the material to steel and hole location by plus/minus dimensions. The blind hole is plain and unthreaded. Show me the remaining proposed requirements and ask for my confirmation before saving them. Once I explicitly confirm those displayed proposals, save and give me the STEP with PMI, without generating a drawing.",
-              "tools_triggered": "read_specify, specify_interpret when needed, update_specify, specify_export_step; request_step_download only to renew a link",
+              "tools_triggered": "read_specify, specify_interpret, update_specify, specify_export_step",
               "expected_behavior": "Match the owner instructions to current questions and validated options. Show every remaining proposal before accepting the explicitly confirmed group, using the current revision. No thread or GD&T is silently assumed. Refuse export while decisions remain pending. After confirmation, return the exact saved AP242 STEP with its writer warnings through chat file delivery or a private link. Keep the session editable and create no drawing job."
             },
             {

@@ -17,8 +17,9 @@ contains no actual credentials.
 5. Enter the supplied existing-account Email and Password and choose Sign in with
    email. Google sign-in is optional and is not required for this review path.
 6. Choose Allow connection. Wait for the redirect back to the initiating host.
-7. Run P1. An empty saved-project list on a new account is valid; P2 creates the
-   first owned sample drawing and P3 creates the Specify working part.
+7. Before the recorded acceptance run, seed one owned sample drawing using P2
+   with demo-bracket.step. Keep it available for review. Run P1 to verify it is
+   visible; P2 creates another test drawing and P3 opens the Specify working part.
 
 ## Secure fields to complete
 
